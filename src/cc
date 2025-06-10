@@ -1,0 +1,8 @@
+Mascota tamagotchi = new Mascota(informacionTamagotchi.getNombreMascota());
+            informacionTamagotchi.setHambre(informacionTamagotchi.getHambre());
+            informacionTamagotchi.setEnergia(informacionTamagotchi.getEnergia());
+            informacionTamagotchi.setLimpieza(informacionTamagotchi.getLimpieza());
+            informacionTamagotchi.setFelicidad(informacionTamagotchi.getFelicidad());
+            informacionTamagotchi.setMalasAtenciones(informacionTamagotchi.getMalasAtenciones());
+            informacionTamagotchi.setBuenasAtenciones(informacionTamagotchi.getBuenasAtenciones());
+            informacionTamagotchi.setNivel(informacionTamagotchi.getNivel());
