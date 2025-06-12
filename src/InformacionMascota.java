@@ -4,7 +4,7 @@ import java.util.List;
 
 public class InformacionMascota implements Serializable {
     //atributos de la clase Mascota
-
+    private static final long serialVersionUID = 1L;
     private String nombreMascota;
     private int hambre;
     private int energia;
@@ -14,7 +14,7 @@ public class InformacionMascota implements Serializable {
     private int buenasAtenciones;
     private int nivel;
     private final List<InformacionMascota> listaMascotas;
-    private static final String fileName = "mascota.bin";
+    private static final String fileName = "mascotas.bin";
 
     //inicializo los atributos en el constructor y la lista de mascotas
     public InformacionMascota(String nombreMascota, int hambre, int energia, int limpieza
@@ -75,16 +75,8 @@ public class InformacionMascota implements Serializable {
         this.felicidad = felicidad;
     }
 
-    public int getMalasAtenciones() {
-        return malasAtenciones;
-    }
-
     public void setMalasAtenciones(int malasAtenciones) {
         this.malasAtenciones = malasAtenciones;
-    }
-
-    public int getBuenasAtenciones() {
-        return buenasAtenciones;
     }
 
     public void setBuenasAtenciones(int buenasAtenciones) {
@@ -99,30 +91,26 @@ public class InformacionMascota implements Serializable {
         this.nivel = nivel;
     }
 
-    public List<InformacionMascota> getListaMascotas() {
-        return listaMascotas;
-    }
-    public void agregarMascota() {
-        listaMascotas.add(this);
-    }
-
     public static void guardarMascotas(List<InformacionMascota> mascotas) {
+        //escribe objetos en un arhivo binario
         try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(fileName))) {
             outputStream.writeObject(mascotas); // Guardar la nueva lista de mascotas
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(); //casting de errores
         }
     }
 
     public static List<InformacionMascota> cargarMascotas() {
+        //crea una lista por defecto si algo sale mal
         List<InformacionMascota> mascotas = new ArrayList<>();
 
+        //lee objetos del archivo binario
         try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(fileName))) {
-            mascotas = (List<InformacionMascota>) inputStream.readObject();
+            mascotas = (List<InformacionMascota>) inputStream.readObject(); //lee los datos y los convierte en una lista
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            e.printStackTrace(); //casting de errores
         }
-        return mascotas;
+        return mascotas; //devuelve la lista cargada
     }
 }
 

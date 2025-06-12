@@ -1,11 +1,12 @@
 import javax.swing.*;
 import java.util.List;
 
-
 /*Esta clase representa el flujo inicial del programa, permitiendo al usuario
 crear una nueva mascota virtual o continuar con una ya existente.*/
 
 public class Login {
+    public static JComboBox<InformacionMascota> comboBox;
+    private Login login = this;
 
     /*Metodo principal que inicia el proceso de login o creación de mascota.
     Muestra un menú de opciones y reacciona según la elección del usuario.*/
@@ -31,33 +32,49 @@ public class Login {
                     mascotasGuardadas.add(informacionTamagotchi); // Agregar la nueva mascota a la lista de mascotas
                     InformacionMascota.guardarMascotas(mascotasGuardadas); // Guardar la lista de mascotas actualizada
 
-                    Mascota game = new Mascota(informacionTamagotchi, nombreMascota);
-                    SwingUtilities.invokeLater(game::start); //asegura de que el metodo start se ejecute en el hilo de la interfaz grafica
+                    Mascota game = new Mascota(informacionTamagotchi, nombreMascota, this); //crear la ventana del juego
+                    SwingUtilities.invokeLater(game::iniciar); //asegura de que el metodo iniciar se ejecute en el hilo de la interfaz grafica
                 } else {
                     JOptionPane.showMessageDialog(null, "Ya existe una mascota con ese nombre.");
+                    login.start();
                 }
             }
         } else if (eleccion == 1) {
             List<InformacionMascota> mascotasGuardadas = InformacionMascota.cargarMascotas(); // Utilizar la clase InformacionTamagotchi para cargar las mascotas
             if (!mascotasGuardadas.isEmpty()) {
-                JComboBox<InformacionMascota> comboBox = new JComboBox<>(mascotasGuardadas.toArray(new InformacionMascota[0]));
-
+                comboBox = new JComboBox<>(mascotasGuardadas.toArray(new InformacionMascota[0])); //cargar las mascotas en el JComboBox
+                add(comboBox);
+                
                 int result = JOptionPane.showConfirmDialog(null, comboBox, "Seleccionar Mascota", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
                 if (result == JOptionPane.OK_OPTION) {
 
                     //recibe la mascota seleccionada del JComboBox
                     InformacionMascota mascotaSeleccionada = (InformacionMascota) comboBox.getSelectedItem();
-                    Mascota game = new Mascota(mascotaSeleccionada, mascotaSeleccionada.getNombreMascota());
+                    Mascota game = new Mascota(mascotaSeleccionada, mascotaSeleccionada.getNombreMascota(), this); //inicia la ventana del juego
 
                     game.setInformacionMascota(mascotaSeleccionada); //modificamos la informacion de la mascota con la del archivo binario
-                    SwingUtilities.invokeLater(game::start);  //asegura de que el metodo start se ejecute en el hilo de la interfaz grafica
+                    SwingUtilities.invokeLater(game::iniciar);  //asegura de que el metodo iniciar se ejecute en el hilo de la interfaz grafica
                 } else {
-                    JOptionPane.showMessageDialog(null, "No se seleccionó ninguna mascota.");
+                    login.start(); //inicia el login
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "No hay mascotas guardadas.");
+                try{
+                    JOptionPane.showMessageDialog(null, "No hay mascotas guardadas.");
+                    login.start();
+                }catch(NullPointerException e){
+                    System.out.println("Error");
+                }
+
             }
         }
+    }
+
+    //getter de el JComboBox y el Main, y metodo add para evitar exepcion
+    private static void add(JComboBox<InformacionMascota> comboBox) {
+    }
+
+    public static JComboBox<InformacionMascota> getComboBox() {
+        return comboBox;
     }
 
     public static void main(String[] args) {
